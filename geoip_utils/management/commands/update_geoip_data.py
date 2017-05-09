@@ -1,9 +1,8 @@
 import os
 import gzip
-import urllib
-import urlparse
 
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.six.moves import urllib
 
 import geoip_utils
 
@@ -19,9 +18,9 @@ class Command(BaseCommand):
         for path in self.files:
             root, filepath = os.path.split(path)
             dowloadpath = os.path.join(download_folder, filepath)
-            downloadurl = urlparse.urljoin(self.base_url, path)
+            downloadurl = urllib.parse.urljoin(self.base_url, path)
             self.stdout.write('Downloading %s to %s\n' % (downloadurl, dowloadpath))
-            urllib.urlretrieve(downloadurl, dowloadpath)
+            urllib.request.urlretrieve(downloadurl, dowloadpath)
             outfilepath, ext = os.path.splitext(dowloadpath)
             if ext != '.gz':
                 raise CommandError('Something went wrong while '
